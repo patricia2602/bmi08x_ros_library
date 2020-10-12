@@ -137,7 +137,7 @@ add_library(${PROJECT_NAME}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(
-  ${PROJECT_NAME}_bmi08x_acc_test src/bmi08x_acc_test.cpp
+  bmi08x_acc_test src/bmi08x_acc_test.cpp
 )
 
 ## Rename C++ executable without prefix
@@ -152,7 +152,8 @@ add_executable(
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
-  ${PROJECT_NAME}_bmi08x_acc_test
+  bmi08x_acc_test
+  ${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
 
@@ -172,7 +173,7 @@ target_link_libraries(
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-install(TARGETS ${PROJECT_NAME}_bmi08x_acc_test
+install(TARGETS bmi08x_acc_test
 # ${PROJECT_NAME}_node
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )

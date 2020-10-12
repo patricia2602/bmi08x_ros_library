@@ -7,9 +7,10 @@ char filename[40];
 BMI08X::BMI08X(){  //the main sensor interface class constructor
 
     sprintf(filename, "/dev/i2c-1");
-
+    //char *filename = (char*)"/dev/i2c-1";
     file = open(filename, O_RDWR);
 
+    std::cout << file << std::endl;
     if ( file < 0)
     {
         std::cout << ("Failed to open the bus.") << std::endl;
