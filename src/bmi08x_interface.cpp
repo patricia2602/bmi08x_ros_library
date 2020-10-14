@@ -7,10 +7,8 @@ char filename[40];
 BMI08X::BMI08X(){  //the main sensor interface class constructor
 
     sprintf(filename, "/dev/i2c-1");
-    //char *filename = (char*)"/dev/i2c-1";
     file = open(filename, O_RDWR);
 
-    std::cout << file << std::endl;
     if ( file < 0)
     {
         std::cout << ("Failed to open the bus.") << std::endl;
@@ -25,7 +23,7 @@ BMI08X::BMI08X(){  //the main sensor interface class constructor
         exit(1);
     }
         else{
-        printf("BMI08X_ACCEL found at 0x%02X\n BMI08X_GYRO found at 0x%02X\n",  BMI08X_ACCEL_I2C_ADDR_SECONDARY, BMI08X_GYRO_I2C_ADDR_SECONDARY);
+        printf("BMI08X_ACCEL found at 0x%02X\nBMI08X_GYRO found at 0x%02X\n",  BMI08X_ACCEL_I2C_ADDR_SECONDARY, BMI08X_GYRO_I2C_ADDR_SECONDARY);
     }
 
 }
@@ -85,21 +83,25 @@ BMI08X_INTF_RET_TYPE i2c_write(uint8_t reg_addr, const uint8_t *read_data, uint3
 
 }
 
-void delay_us(uint32_t period, void *intf_ptr){
+void user_delay(uint32_t period, void *intf_ptr){
             // std::cout << ("i2c_delayed for: ") << period*1000 << " ms" << std::endl;
-            usleep(period*1000000);
+            usleep(period*1000);
 
 }
 
 bmi08x_dev BMI08X::initialize(int8_t &rslt){
     struct bmi08x_dev dev;
-
-    dev.accel_chip_id = BMI08X_ACCEL_I2C_ADDR_SECONDARY;
-    dev.gyro_chip_id = BMI08X_GYRO_I2C_ADDR_SECONDARY;
+    uint8_t acc_dev_addr = BMI08X_ACCEL_I2C_ADDR_SECONDARY; 
+    uint8_t gyro_dev_addr = BMI08X_GYRO_I2C_ADDR_SECONDARY;
+    dev.intf_ptr_accel = &acc_dev_addr;
+    dev.intf_ptr_gyro = &gyro_dev_addr;
+    dev.accel_chip_id = acc_dev_addr;
+    dev.gyro_chip_id = gyro_dev_addr;
     dev.intf = BMI08X_I2C_INTF;
     dev.read = i2c_read;
     dev.write = i2c_write;
-    dev.delay_us = delay_us;
+    dev.delay_us = user_delay;
+    dev.variant = BMI088_VARIANT;
 
     rslt = bmi08a_init(&dev);
     rslt = bmi08g_init(&dev);
